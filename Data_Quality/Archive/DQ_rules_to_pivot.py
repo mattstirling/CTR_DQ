@@ -8,8 +8,8 @@ import pandas as pd
 
 bWriteReport = 1
 
-sFilePath = 'C:/Users/mstirling/Desktop/Shared/for Ken Lu/CTR POC DQ Rules v0 4 2015-09-15.xlsx'
-destination = 'C:/Users/mstirling/Desktop/Shared/for Ken Lu/out/'
+sFilePath = 'C:/Temp/python/in/CTR POC DQ Rules v0 4 2015-09-15.xlsx'
+destination = 'C:/Temp/python/out/'
 
 DQ_Rules = pd.read_excel(sFilePath,'CTR DQ Rules', header = 0, parse_cols=12)
 DQ_Rules['DQ Complete Rule'] = pd.Series(DQ_Rules[u'CTR Attribute'] + "." + DQ_Rules[u'DQ RuleName'] + DQ_Rules[u'DQ Rule Metadata'], index = DQ_Rules.index )

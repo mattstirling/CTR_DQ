@@ -8,8 +8,8 @@ import pandas as pd
 
 bWriteReport = 1
 
-sFilePath = 'C:/Users/mstirling/Desktop/Shared/for Ken Lu/MR_CTR_DQ_Rules v0 7 2015-10-05.xlsx'
-destination = 'C:/Users/mstirling/Desktop/Shared/for Ken Lu/out/'
+sFilePath = 'C:/Temp/python/in/MR_CTR_DQ_Rules v0 7 2015-10-05.xlsx'
+destination = 'C:/Temp/python/out/'
 
 DQ_Rules = pd.read_excel(sFilePath,'CTR DQ Rules', header = 0, parse_cols=12)
 CDE_data = pd.read_excel(sFilePath,'CDE List', header = 0, parse_cols=7)
