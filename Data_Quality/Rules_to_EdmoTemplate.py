@@ -8,31 +8,37 @@ import pandas as pd
 
 bWriteReport = 1
 
-sFilePath = 'C:/Temp/python/in/MR_CTR_DQ_Rules v0 7 2015-10-05.xlsx'
+sFilePath = 'C:/Temp/python/in/MR_CTR_DQ_Rules v0 8 2015-10-23.xlsx'
 destination = 'C:/Temp/python/out/'
 
-DQ_Rules = pd.read_excel(sFilePath,'CTR DQ Rules', header = 0, parse_cols=12)
+DQ_Rules = pd.read_excel(sFilePath,'CTR DQ Rule List', header = 0, parse_cols=12)
 CDE_data = pd.read_excel(sFilePath,'CDE List', header = 0, parse_cols=7)
 CTR_Physical_Data = pd.read_excel(sFilePath,'CTR Spec to Physical Map', header = 0, parse_cols=7)
-CTR_Table_Data = pd.read_excel(sFilePath,'CTR Table Metadata', header = 0, parse_cols=6)
-CTR_RuleSource_data = pd.read_excel(sFilePath,'Source of DQ Rules - CM', header = 1, parse_cols=26)
+CTR_Table_Data = pd.read_excel(sFilePath,'CTR Table List', header = 0, parse_cols=7)
+CTR_RuleSource_data = pd.read_excel(sFilePath,'Source of DQ Rules', header = 1, parse_cols=26)
 
 #concatenate the cells into one rule expression per each row
 aTemp = []
 for i in range(len(DQ_Rules.index)):
     sTemp = ''
-    if not pd.isnull(DQ_Rules[u'DQ Rule Name'][i]):
+    if not pd.isnull(DQ_Rules[u'CTR DQ Rule Id'][i]):
+        sTemp = "[" + str(1000000+int(DQ_Rules[u'CTR DQ Rule Id'][i]))[-6:] + "]"
         if not pd.isnull(DQ_Rules[u'CTR Table Filter'][i]):
-            sTemp = "[" + str(DQ_Rules[u'CTR Table Filter'][i]) + "]"
+            sTemp = sTemp + "[id=" + str(DQ_Rules[u'CTR Table Filter'][i]) + "]"
         sTemp = sTemp + str(DQ_Rules[u'DQ Rule Name'][i]) + str(DQ_Rules[u'DQ Rule Metadata'][i])
     aTemp.append(sTemp)
 
 #add the rule expression to the DQ_Rules Dataset
 DQ_Rules['DQ Complete Rule'] = pd.Series(aTemp, index = DQ_Rules.index )
+#print DQ_Rules 
+
+with pd.ExcelWriter(destination + 'report_DQ.xlsx') as writer:
+        #DQ_Rules.to_excel(writer, sheet_name = 'DQ Rough', index = False) 
+        DQ_Rules.to_excel(writer, sheet_name = 'DQ Summary Report', index = False, merge_cells = False)
 
 #pivot the DQ_Rules data
 DQ_Pivot=pd.pivot_table(DQ_Rules,index=[u'CDE',u'CTR Table Name',u'CTR Physical Column Name'],values=['DQ Complete Rule'],
-               columns=[u'Dimension'],aggfunc=lambda x: "%s" % ', '.join(x),fill_value='')
+               columns=[u'EDMO Dimension'],aggfunc=lambda x: "%s" % ', '.join(x),fill_value='')
 print len(DQ_Pivot.index)
 
 #rename the columns to the dimension
@@ -47,9 +53,10 @@ DQ_Pivot[u'CTR Physical Column Name'] = [c for (a,b,c) in DQ_Pivot.index]
 DQ_Pivot[u'Accuracy Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%' for i in range(len(DQ_Pivot.index))]
 DQ_Pivot[u'Completeness Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%' for i in range(len(DQ_Pivot.index))]
 DQ_Pivot[u'Comprehensiveness Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%' for i in range(len(DQ_Pivot.index))]
+DQ_Pivot[u'Coverage Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%' for i in range(len(DQ_Pivot.index))]
 DQ_Pivot[u'Integrity Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%' for i in range(len(DQ_Pivot.index))]
 DQ_Pivot[u'Latency Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%' for i in range(len(DQ_Pivot.index))]
-DQ_Pivot[u'Logic Reasonableness Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%' for i in range(len(DQ_Pivot.index))]
+DQ_Pivot[u'Logic / Reasonableness Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%' for i in range(len(DQ_Pivot.index))]
 DQ_Pivot[u'Recency Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%' for i in range(len(DQ_Pivot.index))]
 DQ_Pivot[u'Timeliness Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%' for i in range(len(DQ_Pivot.index))]
 DQ_Pivot[u'Uniqueness Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%' for i in range(len(DQ_Pivot.index))]
@@ -111,13 +118,11 @@ for col in DQ_Pivot.columns:
 DQ_Pivot.rename(columns={u'CDE':u'LOGICALNAME Business - Defined'}, inplace=True)
 DQ_Pivot.rename(columns={u'Data Quality Rule':u'DATA QUALITY BUSINESS RULE'}, inplace=True)
 
-"Standardized Principle / Measure Name (CBA) & Bank Specific"
-
-
 write_columns = [u'CDE #', u'CDE REG NUMBER (Assigned by EDMO)', u'BUSINESS GLOSSARY DEFINATION', u'Standardized Principle / Measure Name (CBA) & Bank Specific', 
                  u'Limitations/Commentary/CCR', u'CDE NAME', u'DATA QUALITY BUSINESS RULE', u'CTR Spec Name', u'DATA QUALITY STAGE (ER)', u'LOGICALNAME Business - Defined', 
-                 u'CTR Table Name',u'CTR Physical Column Name', u'CTR Data Type', u'Completeness', u'Completeness Threshold', u'Uniqueness', u'Uniqueness Threshold', u'Validity', u'Validity Threshold', u'Logic Reasonableness', 
-                 u'Logic Reasonableness Threshold', u'Accuracy', u'Accuracy Threshold', u'Integrity', u'Integrity Threshold', u'Timeliness', u'Timeliness Threshold',
+                 u'CTR Table Name',u'CTR Physical Column Name', u'CTR Data Type', u'Completeness', u'Completeness Threshold', u'Uniqueness', u'Uniqueness Threshold', u'Validity', u'Validity Threshold', 
+                 u'Logic / Reasonableness', 
+                 u'Logic / Reasonableness Threshold', u'Accuracy', u'Accuracy Threshold', u'Integrity', u'Integrity Threshold', u'Timeliness', u'Timeliness Threshold',
                  u'Recency ', u'Recency Threshold', u'Latency ', u'Latency Threshold', u'Coverage', u'Coverage Threshold', u'Comprehensiveness',
                  u'Comprehensiveness Threshold']
 
@@ -127,7 +132,7 @@ DQ_Pivot.sort(sort_columns, inplace = True)
 if bWriteReport:
     with pd.ExcelWriter(destination + 'report.xlsx') as writer:
         #DQ_Rules.to_excel(writer, sheet_name = 'DQ Rough', index = False) 
-        DQ_Pivot.to_excel(writer, sheet_name = 'DQ Summary Report', index = False, merge_cells = False,
+        DQ_Pivot.to_excel(writer, sheet_name = 'EDMO DQ Summary Report', index = False, merge_cells = False,
                           columns = write_columns)
         
 print('done DQ_Rules_to_pivot')        

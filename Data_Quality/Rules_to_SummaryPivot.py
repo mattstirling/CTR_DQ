@@ -9,8 +9,8 @@ import pandas as pd
 
 bWriteReport = 1
 
-sFilePath = 'C:/Temp/python/in/MR_CTR_DQ_Rules v0 8 2015-10-13.xlsx'
-destination = 'C:/Temp/python/out/for Ken Lu/out/'
+sFilePath = 'C:/Temp/python/in/MR_CTR_DQ_Rules v0 9 2015-10-29.xlsx'
+destination = 'C:/Temp/python/out/'
 
 DQ_Rules = pd.read_excel(sFilePath,'CTR DQ Rule List', header = 0, parse_cols=12, nrows = 50)
 #DQ_Rules['DQ Complete Rule'] = pd.Series(DQ_Rules[u'CTR Attribute'] + "." + DQ_Rules[u'DQ RuleName'] + DQ_Rules[u'DQ Rule Metadata'], index = DQ_Rules.index )
@@ -20,9 +20,10 @@ aTemp = []
 for i in range(len(DQ_Rules.index)):
     sTemp = ''
     if not pd.isnull(DQ_Rules[u'DQ Rule Name'][i]):
+        sTemp = "[" + str(1000000+int(DQ_Rules[u'CTR DQ Rule Id'][i]))[-6:] + "]"
         if not pd.isnull(DQ_Rules[u'CTR Table Filter'][i]):
-            sTemp = "[" + str(DQ_Rules[u'CTR Table Filter'][i]) + "]"
-        sTemp = sTemp + str(DQ_Rules[u'CTR Physical Column Name'][i]) + "." + str(DQ_Rules[u'DQ Rule Name'][i]) + str(DQ_Rules[u'DQ Rule Metadata'][i])
+            sTemp += "[" + str(DQ_Rules[u'CTR Table Filter'][i]) + "]"
+        sTemp += str(DQ_Rules[u'CTR Physical Column Name'][i]) + "." + str(DQ_Rules[u'DQ Rule Name'][i]) + str(DQ_Rules[u'DQ Rule Metadata'][i])
     aTemp.append(sTemp)
 
 DQ_Rules['DQ Complete Rule'] = pd.Series(aTemp, index = DQ_Rules.index )
