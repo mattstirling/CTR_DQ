@@ -14,7 +14,7 @@ filename_CTRout = 'CTR_Outbound_Mapping.xlsx'
 filename_out_CTRspec_sheet_list = 'CTRspec_sheet_list.txt'
 
 #chose the xls version to look at
-filename_CTRspec = filename_CTRout
+filename_CTRspec = filename_CTRspec_150
 
 f = open(out_folder + filename_out_CTRspec_sheet_list,'w')
 xls = pd.ExcelFile(in_folder + filename_CTRspec)

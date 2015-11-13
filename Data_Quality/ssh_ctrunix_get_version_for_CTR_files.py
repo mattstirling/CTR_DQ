@@ -20,7 +20,8 @@ bListFiles = 1
 bGetFile = 1
 CTR_server_path = '/opt/ctr/ctr/ctrapp/ctr/ctrarchive/infiles/'
 RW_server_path = '/opt/bns/var_rw/data/riskwatch/wss/fx/'
-in_list_filename = 'CTR_CM_File_Types.txt'
+in_list_filetype = 'CTR_CM_File_Types.txt'
+in_list_filename = 'CTR_file_list.txt'
 CTR_filetype = '.csv'
 CTR_date = '20151102'
 
@@ -32,28 +33,16 @@ out_filename = 'CTR_CM_fileType_list.txt'
 out_folder_ken = 'K:/Application Development/DATA/DATALOAD/K2/'
 
 
-out_folder = out_folder_ken
+out_folder = out_folder
 f = open(in_folder + pass_file,'r')
 ctr_host = f.readline().strip()
 ctr_username = f.readline().strip()
 ctr_pass = f.readline().strip()
 f.close()
 
-'''
-CTR_system = 'SILOPICS'
-CTR_record_type = '_LO_DL'
-CTR_dly_mnthly = '_D_'
-CTR_filetype = '.csv'
-
-#get the list of dates
-CTR_datelist = []
-now = datetime.now()
-for dt in rrule.rrule(rrule.DAILY, dtstart=now + timedelta(days=-100), until=now):
-    CTR_datelist.append(dt.strftime('%Y%m%d'))
-'''
-
 #get the files
 paramiko.util.log_to_file('ssh.log') #turns on logging for access the unix file using ssh/smtp
+filelist = []
 
 if bListFiles:
     ssh = paramiko.SSHClient() 
@@ -63,49 +52,11 @@ if bListFiles:
     sftp = ssh.open_sftp()
     
     #get the files we are interested in
-    serverfile_list = sftp.listdir(path=CTR_server_path)
-    #print serverfile_list
-    #print len(serverfile_list)
-    
-    #look at files for only one date
-    new_list = []
-    for server_file in serverfile_list:
-        if CTR_date in server_file:
-            new_list.append(server_file)
-    serverfile_list = new_list
-    #print len(serverfile_list)
-    
-    #look at files for only one "file extension type"
-    new_list = []
-    for server_file in serverfile_list:
-        if CTR_filetype == server_file[-4:]:
-            new_list.append(server_file)
-    serverfile_list = new_list
-    #print len(serverfile_list)
-    
-    '''
-    if bGetFile:
-        #determine the list of files to grab
-        #get the unix file via ssh and save locally
-        ssh = paramiko.SSHClient() 
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        #ssh.load_system_host_keys()
-        #ssh.load_host_keys(os.path.expanduser(os.path.join("~", ".ssh", "known_hosts")))
-        ssh.connect('ctr-uat.bns', username='mstirl', password='July2015')
-        #stdin, stdout, stderr = ssh.exec_command('ls -l')
-        sftp = ssh.open_sftp()
-        for sFilename in serverfile_list:
-            #print source + sFilename
-            sftp.get(CTR_server_path + sFilename, out_folder + sFilename)
-        sftp.close()
-        ssh.close()
-        print('got the file')
-    else:
-        print('did not get file')
-    '''
+    f = open(in_folder + pass_file,'r')
+    for line in f:
+        filelist.append(str(line).strip())
         
     #now get the CTR filelist, and the version for each
-    #CTR_filelist = []
     f = open(out_folder + out_file,'w')
     with open(in_folder + in_list_filename, 'r') as infile:
         for line in infile:

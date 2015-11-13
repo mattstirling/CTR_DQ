@@ -8,13 +8,13 @@ import pandas as pd
 
 bWriteReport = 1
 
-sFilePath = 'C:/Temp/python/in/MR_CTR_DQ_Rules v0 8 2015-10-23.xlsx'
+sFilePath = 'C:/Temp/python/in/MR_CTR_DQ_Rules v0 9 2015-10-29.xlsx'
 destination = 'C:/Temp/python/out/'
 
 DQ_Rules = pd.read_excel(sFilePath,'CTR DQ Rule List', header = 0, parse_cols=12)
 CDE_data = pd.read_excel(sFilePath,'CDE List', header = 0, parse_cols=7)
 CTR_Physical_Data = pd.read_excel(sFilePath,'CTR Spec to Physical Map', header = 0, parse_cols=7)
-CTR_Table_Data = pd.read_excel(sFilePath,'CTR Table List', header = 0, parse_cols=7)
+CTR_Table_Data = pd.read_excel(sFilePath,'CTR Table List', header = 0, parse_cols=10)
 CTR_RuleSource_data = pd.read_excel(sFilePath,'Source of DQ Rules', header = 1, parse_cols=26)
 
 #concatenate the cells into one rule expression per each row
@@ -39,7 +39,7 @@ with pd.ExcelWriter(destination + 'report_DQ.xlsx') as writer:
 #pivot the DQ_Rules data
 DQ_Pivot=pd.pivot_table(DQ_Rules,index=[u'CDE',u'CTR Table Name',u'CTR Physical Column Name'],values=['DQ Complete Rule'],
                columns=[u'EDMO Dimension'],aggfunc=lambda x: "%s" % ', '.join(x),fill_value='')
-print len(DQ_Pivot.index)
+print 1,len(DQ_Pivot.index)
 
 #rename the columns to the dimension
 DQ_Pivot.columns = [b for (a,b) in DQ_Pivot.columns]
@@ -62,19 +62,19 @@ DQ_Pivot[u'Timeliness Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%
 DQ_Pivot[u'Uniqueness Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%' for i in range(len(DQ_Pivot.index))]
 DQ_Pivot[u'Validity Threshold'] = ['GREEN >98%, YELLOW <98% and >96%, RED <96%' for i in range(len(DQ_Pivot.index))]
 
-print len(DQ_Pivot.index)
+print 2,len(DQ_Pivot.index)
 
 #merge CDE_data
 DQ_Pivot = pd.merge(DQ_Pivot,CDE_data, how='left',on=u'CDE')
-print len(DQ_Pivot.index)
+print 3,len(DQ_Pivot.index)
 
 #merge physical data
 DQ_Pivot = pd.merge(DQ_Pivot,CTR_Physical_Data,how='left',on=[u'CTR Table Name',u'CTR Physical Column Name'])
-print len(DQ_Pivot.index)
+print 4,len(DQ_Pivot.index)
 
 #merge table data
 DQ_Pivot = pd.merge(DQ_Pivot,CTR_Table_Data,how='left',on=[u'CTR Table Name'])
-print len(DQ_Pivot.index)
+print 5,len(DQ_Pivot.index)
 
 #aggregate together the source business description of the business rules
 #merge DQ_Rules with CTR_RuleSource_data, aggregate 'Data Quality Rule' by CDExTable, then merge to DQ_Pivot
@@ -84,7 +84,7 @@ CTR_RuleSource_Pivot = pd.pivot_table(CTR_RuleSource_data,index=[u'CDE',u'CTR Ta
 CTR_RuleSource_Pivot[u'CDE'] = [a for (a,b) in CTR_RuleSource_Pivot.index]
 CTR_RuleSource_Pivot[u'CTR Table Name'] = [b for (a,b) in CTR_RuleSource_Pivot.index]
 DQ_Pivot = pd.merge(DQ_Pivot,CTR_RuleSource_Pivot,how='left',on=[u'CTR Table Name',u'CDE'])
-print len(DQ_Pivot.index)
+print 6,len(DQ_Pivot.index)
 print CTR_RuleSource_Pivot.columns
 
 #DQ_Pivot2=pd.DataFrame(np.array([(a,b,c) for (a,b,c) in DQ_Pivot.index]),columns = [u'CDE',u'CTR Table',u'CTR Attribute'])
