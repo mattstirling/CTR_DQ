@@ -6,6 +6,7 @@ mstirling
 
 #import libraries
 import paramiko
+
 from itertools import islice
 import os
 
@@ -18,6 +19,7 @@ bListFiles = 1
 bGetFile = 1
 CTR_server_path = '/opt/ctr/ctr/ctrapp/ctr/ctrarchive/outfiles/'
 RW_server_path = '/opt/bns/var_rw/data/riskwatch/wss/fx/'
+basel_server_path = ''
 #in_list_filetype = 'CTR_CM_File_Types.txt'
 in_list_filename = 'CTR_file_list.txt'
 CTR_filetype = '.csv'
@@ -29,9 +31,9 @@ pass_file = 'ctr_unix_prd.txt'
 out_file = 'CTR_file_list.txt'
 out_filename = 'CTR_CM_fileType_list.txt'
 out_folder_ken = 'K:/Application Development/DATA/DATALOAD/K2/'
+out_folder_desktop = 'C:/Users/mstirling/Desktop/Shared/for Ken Armstrong/2015-10'
 
-
-out_folder = out_folder
+out_folder = out_folder_desktop
 f = open(in_folder + pass_file,'r')
 ctr_host = f.readline().strip()
 ctr_username = f.readline().strip()

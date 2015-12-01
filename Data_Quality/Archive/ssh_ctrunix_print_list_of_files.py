@@ -16,17 +16,19 @@ from datetime import datetime, timedelta
 #initialize variables
 bListFiles = 1
 bFilterFiletype = 1
-filter_Filetype = '.dat' 
-#CTR_server_path = '/opt/ctr/ctr/ctrapp/ctr/ctrarchive/infiles/'
-CTR_server_path = '/opt/ctr/ctr/ctrapp/ctr/ctrarchive/outfiles/'
-RW_server_path = '/opt/bns/var_rw/data/riskwatch/wss/fx/'
+CTR_server_in_path = '/opt/ctr/ctr/ctrapp/ctr/ctrarchive/infiles/'
+CTR_server_out_path = '/opt/ctr/ctr/ctrapp/ctr/ctrarchive/outfiles/'
+RW_server_in_path = '/opt/bns/var_rw/data/riskwatch/wss/fx/'
+Basel_server_in_path = '/opt/bns/basel/data/storage/2015/10/'
 in_folder = 'C:/Temp/python/in/'
 out_folder = 'C:/Temp/python/out/'
 out_file = 'CTR_file_list.txt'
 
-pass_file = 'ctr_unix_prd.txt'
-server_path = CTR_server_path
+#final intialize variables
+pass_file = 'basel_unix_prd.txt'
+server_path = Basel_server_in_path
 filter_filedate = '20151030'
+filter_Filetype = '.csv' 
 
 f = open(in_folder + pass_file,'r')
 ctr_host = f.readline().strip()
@@ -65,5 +67,5 @@ else:
     print ('did not get list of files')
 
 #print CTR_filelist
-print 'done'
+print 'output to '+out_folder + out_file
 
