@@ -12,7 +12,7 @@ from zipfile import ZipFile
 bGetFile = 0
 bListSSHFiles = 1
 bFilterFiletype = 1
-bListZipFiles = 1
+bListZipFiles = 0
 
 #folder data
 in_folder = 'C:/Temp/python/in/'
@@ -81,7 +81,6 @@ if bListSSHFiles:
                             print 'saving ' + str(server_file)
                         sftp.get(server_path + str(server_file), out_folder + str(server_file))
     
-    if bListZipFiles:
         
                     
     f.close()    
