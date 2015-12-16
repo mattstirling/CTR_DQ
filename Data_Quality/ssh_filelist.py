@@ -24,7 +24,7 @@ pass_file = 'ctr_unix_prd.txt'
 server_path_list = ['/opt/ctr/ctr/ctrapp/ctr/ctrarchive/infiles/', '/opt/ctr/ctr/ctrapp/ctr/ctrarchive/outfiles/']
 
 #filter data
-filter_filedate = '20151126'
+filter_filedate = '20151030'
 filter_filetype_list = ['.csv','.dat']
 
 def format_ctr_file(filename):
