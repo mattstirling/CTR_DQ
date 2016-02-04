@@ -7,15 +7,16 @@ Read values from the many files into a dataframe because it is easy to write val
 
 #import libraries
 import os
+import time
 
 #initialize variables
 bListFiles = 1
 bRemoveDuplicateCols = 1
 readin_folder = 'C:/IBM/InformationServer11-5/ASBNode/bin/Result/'
 in_folder = 'C:/Temp/python/in/'
-in_file = 'Test_Cases_MR_CTR_DQ v0 7 2015-11-16.xlsx'
+#in_file = 'Test_Cases_MR_CTR_DQ v0 7 2015-11-16_MS added unique id.xlsx'
 out_folder = 'C:/Temp/python/out/'
-out_file = 'report_DQ_IA_summary_rule_list.csv'
+out_file = 'report_DQ_IA_summary_rule_list_' + time.strftime("%Y%m%d") + '.csv'
 
 print (len('Description,'))
 

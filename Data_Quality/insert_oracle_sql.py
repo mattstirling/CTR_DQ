@@ -7,15 +7,16 @@ Created on Nov 13, 2015
 import cx_Oracle,glob,os
 
 #open vm db connecttion  
-conn = cx_Oracle.connect('ctrmso/password@192.168.56.10/orcl')    
+conn = cx_Oracle.connect('ctrmso/password@10.6.134.243:1527/orcl')    
 cursor = conn.cursor ()  
-os.chdir("c:/temp/python/out")
+os.chdir("c:/temp/python/out/SQL")
 
 #loop dir with txt file
 for file in glob.glob("*.txt"):
     print file
     for line in open(file):  
-        cursor.execute (line)  
+        #print line.strip()
+        cursor.execute (line.strip())  
         conn.commit()
         print line + " commit"
 #close connection

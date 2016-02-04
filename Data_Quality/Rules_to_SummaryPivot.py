@@ -7,14 +7,18 @@ import pandas as pd
 
 bWriteReport = 1
 
-sFilePath = 'C:/Temp/python/in/MR_CTR_DQ_Rules v0 10 2015-11-24.xlsx'
+sFilePath = 'C:/Temp/python/in/MR_CTR_DQ_Rules v2 1 2015-12-03.xlsx'
 destination = 'C:/Temp/python/out/'
-file_out = 'report_DQ_pivot.xlsx'
+out_folder = 'C:/Temp/python/out/'
+file_out = 'report_DQ_rule_list.csv'
 
-DQ_Rules = pd.read_excel(sFilePath,'CTR DQ Rule List', header = 0, parse_cols=12)
+DQ_xls = pd.read_excel(sFilePath,'DQ Rule List', header = 1)
+rule_col_list = ['isNotNull','isGreaterThan','isLessThan','AmtIsLessThan','inDomain']
+f = open(out_folder+file_out,'w')
 
-aTemp = []
-for i in range(len(DQ_Rules.index)):
+for i in DQ_xls.index:
+    
+    '''
     sTemp = ''
     if not pd.isnull(DQ_Rules[u'DQ Rule Name'][i]):
         sTemp = "[" + str(int(DQ_Rules[u'CTR DQ Rule Id'][i])) + "]"
@@ -22,18 +26,38 @@ for i in range(len(DQ_Rules.index)):
             sTemp += "[" + str(DQ_Rules[u'CTR Table Filter'][i]) + "]"
         sTemp += str(DQ_Rules[u'CTR Physical Column Name'][i]) + "." + str(DQ_Rules[u'DQ Rule Name'][i]) + str(DQ_Rules[u'DQ Rule Metadata'][i])
     aTemp.append(sTemp)
+    '''
+    this_tablename = DQ_xls.at[i,'CTR Table Name'] 
+    this_filtername = DQ_xls.at[i,'CTR Table Filter']
+    this_columnname = DQ_xls.at[i,'CTR Physical Column Name']
+    
+    for rule in rule_col_list:
+        if not str(DQ_xls.at[i,rule])=='nan':
+            this_rule = rule
+            this_parameter = DQ_xls.at[i,rule]
+            
+            '''
+            df.loc[df.shape[0]+1] = [filename, 
+                                    this_tablename,
+                                    this_columnname,
+                                    this_rulename,
+                                    this_unique_id_col_name,
+                                    this_unique_id,
+                                    this_header,
+                                    this_line]
+            '''
+            f.write(this_tablename)
+            f.write(',' + str(this_filtername))
+            f.write(',' + str(this_columnname))
+            f.write(',' + str(this_rule))
+            f.write(',' + str(this_parameter))
+            f.write('\n')
+    
+    #CTR Table Name    CTR Table Filter    CTR Physical Column Name    CDE    isNotNull    isGreaterThan    isLessThan    AmtIsLessThan    inDomain    CURRENCY    START_DATE    VALUATION_DATE    MATURITY_DATE
 
-DQ_Rules['DQ Complete Rule'] = pd.Series(aTemp, index = DQ_Rules.index )
-
-DQ_Pivot=pd.pivot_table(DQ_Rules,index=[u'CTR Table Name',u'CDE'],values=['DQ Complete Rule'], 
-               columns=[u'EDMO Dimension'],aggfunc=lambda x: "%s" % ', '.join(x),fill_value='')
-
-if bWriteReport:
-    with pd.ExcelWriter(destination + file_out) as writer:
-        #DQ_Rules.to_excel(writer, sheet_name = 'DQ Rough', index = False) 
-        DQ_Pivot.to_excel(writer, sheet_name = 'DQ Summary Report', index = True)
+    
         
 print('done DQ_Rules_to_pivot')       
-print file_out 
+print out_folder+file_out 
 
     
