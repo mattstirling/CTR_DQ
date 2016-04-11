@@ -7,11 +7,11 @@ import pandas as pd
 
 #folder data
 in_folder = 'C:/Temp/python/in/'
-in_file = 'MR_CTR_DQ_Rules v2 1 2015-12-03.xlsx'
+in_file = 'MR_CTR_DQ_Rules_v3_7__2016-02-22.xlsx'
 out_folder = 'C:/Temp/python/out/'
 out_file = 'tables_to_sql.txt'
 
-DQ_Tables = pd.read_excel(in_folder + in_file,'All Table List', header = 0, parse_cols=7)
+DQ_Tables = pd.read_excel(in_folder + in_file,'All Table List', header = 1, parse_cols=7)
 
 f_out = open(out_folder + out_file,'w')
 for col_name in [u'Landing Tables']:

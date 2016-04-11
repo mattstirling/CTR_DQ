@@ -10,7 +10,7 @@ import time
 bWriteReport = 1
 
 #file variables
-sFilePath = 'C:/Temp/python/in/MR_CTR_DQ_Rules v2 1 2015-12-03.xlsx'
+sFilePath = 'C:/Temp/python/in/MR_CTR_DQ_Rules_v3_5__2016-02-10.xlsx'
 destination = 'C:/Temp/python/out/'
 out_folder = 'C:/Temp/python/out/'
 out_file = 'report_DQ_BRD_rule_list_with_report_attributes_' + time.strftime("%Y%m%d") + '.xlsx'
@@ -22,7 +22,7 @@ DQ_out = pd.DataFrame(columns=['CTR Table Name','CTR Table Filter','CTR Physical
                                'CTR Rule Code','CDE Name','EDMO Rule Dimension','CBA Rule Dimension','DQ Rule Desc','DQ Rule Test Depth'])
 
 #read rules from the BRD
-DQ_xls = pd.read_excel(sFilePath,'DQ Rule List', header = 1)
+DQ_xls = pd.read_excel(sFilePath,'DQ Rule Matrix', header = 1)
 DQ_Rule_Metadata = pd.read_excel(sFilePath,'DQ Rule Library List', header = 1)
 print DQ_Rule_Metadata
 

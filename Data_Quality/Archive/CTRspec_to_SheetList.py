@@ -5,7 +5,7 @@ Created on Oct 29, 2015
 '''
 import pandas as pd
 
-in_folder = 'C:/Temp/python/in/'
+in_folder = 'C:/Temp/python/in/CTR Specs/'
 out_folder = 'C:/Temp/python/out/'
 filename_CTRspec_160 = 'CTR_Inbound_Mapping_(Original_Format)v1.60.xlsx'
 filename_CTRspec_150 = 'CTR_Inbound_Mapping_(Original_Format)v1.50.xlsx'

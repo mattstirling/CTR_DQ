@@ -14,11 +14,12 @@ from itertools import islice
 bListSSHFiles = 1
 bGetSSHFileVersion = 1
 bDownloadSSHFile = 1
-bListZipFiles = 1
+bListZipFiles = 0
 
 
 #folder data
-out_folder = 'C:/Temp/python/out/'
+#out_folder = 'C:/Temp/python/out/'
+out_folder = 'C:/Users/mstirling/Desktop/Shared/forAswani/SILOPICS 2016-02-24/'
 out_file = 'server_and_zip_file_list.txt'
 in_folder = 'C:/Temp/python/in/'
 in_zipfile = 'compress/ctrdata-data_out-26-NOV-15-1448662274.zip'
@@ -26,12 +27,14 @@ zip_folders = ['outfiles/riskwatch/','outfiles/lancelot/']
 
 #server data
 pass_file = 'ctr_unix_prd.txt'
-server_path_list = ['/opt/ctr/ctr/ctrapp/ctr/ctrarchive/infiles/', '/opt/ctr/ctr/ctrapp/ctr/ctrarchive/outfiles/']
+#server_path_list = ['/opt/ctr/ctr/ctrapp/ctr/ctrarchive/infiles/', '/opt/ctr/ctr/ctrapp/ctr/ctrarchive/outfiles/']
+server_path_list = ['/opt/ctr/ctr/ctrapp/ctr/ctrarchive/outfiles/riskwatch/']
 
 #filter data
-filter_filedate = '20151126'
+filter_filedate = '20160224'
 filter_filetype_list = ['.csv']
-filter_ignored_loan_systems = ['SILOPICS_','BM_','GBOS_','WSSMM_','ACBS_']
+#filter_ignored_loan_systems = ['SILOPICS_','BM_','GBOS_','WSSMM_','ACBS_']
+filter_ignored_loan_systems = ['ACBS_']
 
 def format_ctr_file(filename):
     #assume every file ends: ..._D_2015mmdd_...
@@ -86,7 +89,7 @@ if bListSSHFiles:
             
             #filter for 1 date
             #filter by filetype extension
-            if filter_filedate in server_file and server_file[-4:] in filter_filetype_list:
+            if filter_filedate in server_file and server_file[-4:] in filter_filetype_list and server_file[:9]=='SILOPICS_':
                 
                 #filter out loan files
                 if sum([1 for i in filter_ignored_loan_systems if i in server_file ])==0: 

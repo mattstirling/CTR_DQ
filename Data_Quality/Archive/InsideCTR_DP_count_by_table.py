@@ -4,17 +4,19 @@ Created on Jan 7, 2016
 @author: mstirling
 '''
 
-import cx_Oracle,os, time
+import cx_Oracle, time
+#import os
 
 in_folder = 'C:/Temp/python/in/'
 in_file = 'table_list.txt'
+in_file_connection = 'Ref Data/CTR_PRD_connection.txt'
 out_folder = 'C:/Temp/python/out/'
 out_file = 'table_list_RecordCount_' + time.strftime("%Y%m%d") + '.csv'
 
-#open vm db connecttion  
-#conn = cx_Oracle.connect('CTRMSO/password@localhost:1522/orcl')    
-conn = cx_Oracle.connect('CTR_READ_ONLY/MGJahCLu#7@//sgdxwa01-scan.bns:1535/CTRu1_sgdxwa01.bns')    
-#MGJahCLu#7
+#open vm db connecttion - connection string stored in txt 
+f_in_connection_string = open(in_folder + in_file_connection,'r')
+connection_string = str(f_in_connection_string.readline().strip())
+conn = cx_Oracle.connect(connection_string)    
 cursor = conn.cursor ()  
 f_out = open(out_folder+out_file,'w')
 f_out.write('table,total_count' + '\n')
@@ -34,7 +36,7 @@ for line in open(in_folder+in_file,'r'):
 
 #close connection
 cursor.close () 
-conn.close ()  
+conn.close ()
 
 #report done
 print 'done, ' + str(in_folder) + str(in_file) + ' to ' + str(out_folder) + str(out_file)

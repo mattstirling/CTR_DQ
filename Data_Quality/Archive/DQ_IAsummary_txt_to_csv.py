@@ -12,13 +12,11 @@ import time
 #initialize variables
 bListFiles = 1
 bRemoveDuplicateCols = 1
+#readin_folder = 'C:/IBM/InformationServer11-5/ASBNode/bin/Result/'
 readin_folder = 'C:/IBM/InformationServer11-5/ASBNode/bin/Result/'
 in_folder = 'C:/Temp/python/in/'
-#in_file = 'Test_Cases_MR_CTR_DQ v0 7 2015-11-16_MS added unique id.xlsx'
 out_folder = 'C:/Temp/python/out/'
 out_file = 'report_DQ_IA_summary_rule_list_' + time.strftime("%Y%m%d") + '.csv'
-
-print (len('Description,'))
 
 if bListFiles:
     
@@ -90,10 +88,9 @@ if bListFiles:
                     f_out.write(',' + filename)
                     f_out.write('\n') 
           
-    print ('got the list of files')
 else:
     print ('did not get list of files')
 
 #print CTR_filelist
-print 'done, wrote sheetnames from ' + str(in_folder) + ' to ' + str(out_folder) + str(out_file)
+print 'done, wrote from ' + str(readin_folder) + ' to ' + str(out_folder) + str(out_file)
 
